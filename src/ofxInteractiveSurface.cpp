@@ -8,6 +8,9 @@
 
 #include "ofxInteractiveSurface.h"
 
+// TODO: hacer que el ofxInteractiveSurface se pueda inicializar pasandole
+// objetos externamete, caso kinect.
+
 ofxInteractiveSurface::ofxInteractiveSurface(){
     
     // Initialize the kinect driver
@@ -58,8 +61,10 @@ ofxInteractiveSurface::ofxInteractiveSurface(){
 //  Load the previus calibration data
 //
 void ofxInteractiveSurface::load(){
-    ofSetFullscreen(true);      // Fullscreen it´s need if the surface it´s on other screen (on dual monitor)
-    surfaceContour = view.getMask();                     // Get a local copy of the surface
+    ofSetFullscreen(true);									// Fullscreen it´s need if the surface it´s on other screen (on dual monitor)
+															// ofxInteractiveSurface needs control over the projected image to set
+															// interfase/realobjects homographie
+    surfaceContour = view.getMask();                        // Get a local copy of the surface
     kinect.setDepthClipping((maxDist-minDist),maxDist);     // Do the right clipping
     countDown = 200;                                        // The count down it´s to make a background sustraction
     bCalibrated = true;                                     // Turn the calibration flag on
@@ -232,6 +237,8 @@ void ofxInteractiveSurface::draw(ofTexture &texture ){
         }
         
         // Passthrou the texture of what it´s need to draw.
+		// view es una superficie sobre la que puedo dibujar.
+		// interactiveViewport
         view.draw(texture);
         
         if(bDebug){
